@@ -33,9 +33,7 @@ def scale_x(x):
     Принимает вещественное число, возвращает целое число.
     В случае выхода **x** координаты за пределы экрана возвращает
     координату, лежащую за пределами холста.
-
     Параметры:
-
     **x** — x-координата модели.
     """
 
@@ -48,20 +46,16 @@ def scale_y(y):
     В случае выхода **y** координаты за пределы экрана возвращает
     координату, лежащую за пределами холста.
     Направление оси развёрнуто, чтобы у модели ось **y** смотрела вверх.
-
     Параметры:
-
     **y** — y-координата модели.
     """
 
-    return y  # FIXME: not done yet
+    return y = int(-y*scale_factor) + window_height//2
 
 
 def create_star_image(space, star):
     """Создаёт отображаемый объект звезды.
-
     Параметры:
-
     **space** — холст для рисования.
     **star** — объект звезды.
     """
@@ -74,21 +68,21 @@ def create_star_image(space, star):
 
 def create_planet_image(space, planet):
     """Создаёт отображаемый объект планеты.
-
     Параметры:
-
     **space** — холст для рисования.
     **planet** — объект планеты.
     """
-    pass  # FIXME: сделать как у звезды
+    x = scale_x(planet.x)
+    y = scale_y(planet.y)
+    r = planet.R
+    planet.image = space.create_oval([x - r, y - r], [x + r, y + r], fill=planet.color)
+
 
 
 def update_system_name(space, system_name):
     """Создаёт на холсте текст с названием системы небесных тел.
     Если текст уже был, обновляет его содержание.
-
     Параметры:
-
     **space** — холст для рисования.
     **system_name** — название системы тел.
     """
@@ -97,6 +91,21 @@ def update_system_name(space, system_name):
 
 def update_object_position(space, body):
     """Перемещает отображаемый объект на холсте.
+    Параметры:
+    **space** — холст для рисования.
+    **body** — тело, которое нужно переместить.
+    """
+    x = scale_x(body.x)
+    y = scale_y(body.y)
+    r = body.R
+    if x + r < 0 or x - r > window_width or y + r < 0 or y - r > window_height:
+        space.coords(body.image, window_width + r, window_height + r,
+                     window_width + 2*r, window_height + 2*r)  # положить за пределы окна
+    space.coords(body.image, x - r, y - r, x + r, y + r)
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")
 
     Параметры:
 
